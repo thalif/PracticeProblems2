@@ -10,35 +10,26 @@ namespace Letters
     {
         static void Main(string[] args)
         {
-            long[] input1 = Console.ReadLine().Split(' ').Select(long.Parse).ToArray();
-
+            string NInputs = Console.ReadLine();
             long[] Dormitory = Console.ReadLine().Split(' ').Select(long.Parse).ToArray();
             long[] Letters = Console.ReadLine().Split(' ').Select(long.Parse).ToArray();
 
-            foreach(long letterNo in Letters)
+            for (long i = 0; i < Letters.Length; i++)
             {
-                long DormOF = GuessDormitory(Dormitory, letterNo);
-                
-                long DormitorySum = 0;
-                for (long i = 0; i < DormOF; i++)
-                    DormitorySum += Dormitory[i];
-
-                Console.WriteLine(DormOF + " " + (Dormitory[DormOF - 1] - (DormitorySum - letterNo)));
+                long CombineDormitory = 0;
+                long Dorm = 0;
+                while (true)
+                {
+                    CombineDormitory += Dormitory[Dorm];
+                    if (Letters[i] <= CombineDormitory)
+                    {
+                        Console.WriteLine((Dorm + 1) + " " + Math.Abs((CombineDormitory - Dormitory[Dorm]) - (Letters[i])));
+                        break;
+                    }
+                    Dorm++;
+                }
             }
-        }
-
-        static long GuessDormitory(long[] arr, long letterNo)
-        {
-            long DormOf = 0;
-            long DormitorySum = 0;
-            for (long i = 0; i < arr.Length; i++)
-            {
-                DormitorySum += arr[i];
-                DormOf = i + 1;
-                if (DormitorySum >= letterNo)
-                    break;
-            }
-            return DormOf;
+            Console.ReadKey();
         }
     }
 }
