@@ -10,37 +10,49 @@ namespace BalancedRemainders
     {
         static void Main(string[] args)
         {
+            int Ninputs = int.Parse(Console.ReadLine());
 
-            int NInputs = int.Parse(Console.ReadLine());
-
-            for (int j = 0; j < NInputs; j++)
+            for(int i = 0; i < Ninputs; i++)
             {
-                int GivenArrayLength = int.Parse(Console.ReadLine());
+                int N = int.Parse(Console.ReadLine());
                 int[] GivenArray = Console.ReadLine().Split(' ').Select(int.Parse).ToArray();
-
-                int[] RemindersCounts = ReminderCountsFor(GivenArray);
-                int MovesToMake = 0;
-                for (int i = 0; i < RemindersCounts.Length; i++)
-                    if (RemindersCounts[i] > (GivenArrayLength / 3))
-                        MovesToMake += RemindersCounts[i] - (GivenArrayLength / 3);
-
-                Console.WriteLine(MovesToMake > 1 ? (MovesToMake + 1) : MovesToMake);
+                Balancing(GivenArray, N);
             }
         }
-        static int[] ReminderCountsFor(int[] givenArr)
+        static void Balancing(int[] GivenArray, int N)
         {
-            int[] RemindersBox = new int[3];
-            for (int i = 0; i < givenArr.Length; i++)
+            int CCC = N / 3;
+            int[] Counts = new int[3];
+            for (int k = 0; k < GivenArray.Length; k++)
             {
-                int theReminder = givenArr[i] % 3;
-                if (theReminder == 0)
-                    RemindersBox[0]++;
-                else if (theReminder == 1)
-                    RemindersBox[1]++;
-                else if (theReminder >= 2)
-                    RemindersBox[2]++;
+                int Remind = GivenArray[k] % 3;
+                Counts[Remind]++;
             }
-            return RemindersBox;
+
+            int Move = 0;
+            int i = 0;
+            while (true)
+            {
+                if (Counts[i] > CCC)
+                {
+                    if (i == 2)
+                    {
+                        Move += Counts[i] - CCC;
+                        Counts[0] += Counts[i] - CCC;
+                        Counts[i] -= Counts[i] - CCC;
+                        i = -1;
+                    }
+                    else
+                    {
+                        Move += Counts[i] - CCC;
+                        Counts[i + 1] += Counts[i] - CCC;
+                        Counts[i] -= Counts[i] - CCC;
+                    }
+                }
+                if (Counts.Distinct().Count() == 1) break;
+                i++;
+            }
+            Console.WriteLine(Move);
         }
     }
 }
